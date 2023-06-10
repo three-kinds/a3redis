@@ -1,0 +1,16 @@
+global:
+  redis:
+    password: "123456"
+
+master:
+  disableCommands:
+    - FLUSHALL
+
+replica:
+  replicaCount: 3  
+  disableCommands:
+    - FLUSHALL
+
+sentinel:
+  enabled: true
+  masterSet: mymaster
