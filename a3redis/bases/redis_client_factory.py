@@ -73,9 +73,9 @@ class RedisClientFactory(object):
     def get_rdb(cls, name: str = DEFAULT_NAME, readonly: bool = False) -> Union[Redis, RedisCluster, None]:
         conf = cls._name2conf.get(name)
         if conf is None:
-            if name == DEFAULT_NAME:
+            if name in [DEFAULT_NAME, None]:
                 cls._init_default_rdb()
-                return cls._name2redis[name]
+                return cls._name2redis[DEFAULT_NAME]
             else:
                 raise AssertionError(f"Invalid redis client [{name}]")
 

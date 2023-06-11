@@ -44,7 +44,6 @@ ALL_CONF = {
             'decode_responses': True
         }
     }
-
 }
 
 
