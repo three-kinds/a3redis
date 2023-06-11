@@ -1,0 +1,9 @@
+global:
+  redis:
+    password: "standalone"
+
+master:
+  disableCommands:
+    - FLUSHALL
+
+architecture: standalone

@@ -4,14 +4,16 @@
 minikube start --image-mirror-country='cn' --kubernetes-version=v1.23.8
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
-helm install redis-standalone bitnami/redis --values standalone_redis_values.yaml
-helm install redis-sentinel bitnami/redis --values sentinel_redis_values.yaml
-helm install redis-cluster bitnami/redis-cluster --values cluster_redis_values.yaml
+helm install standalone bitnami/redis --values standalone_redis_values.yaml
+helm install sentinel bitnami/redis --values sentinel_redis_values.yaml
+helm install cluster bitnami/redis-cluster --values cluster_redis_values.yaml
 
 # minikube设置可以mount本机目录
 ip r g $(minikube ip)|awk '{print $3}'|head -n1|xargs sudo ufw allow in on
 sudo ufw reload
 minikube mount $HOME:/host
+# 下次minikube启动时会失效，需要在启动时加上：
+# minikube start --mount --mount-string="$HOME:/host"
 # 加载目标环境
 kubectl apply -f test_a3redis_pod.yaml
 

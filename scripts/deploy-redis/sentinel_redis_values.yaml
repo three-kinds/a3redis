@@ -1,6 +1,6 @@
 global:
   redis:
-    password: "123456"
+    password: "sentinel"
 
 master:
   disableCommands:
@@ -13,4 +13,4 @@ replica:
 
 sentinel:
   enabled: true
-  masterSet: mymaster
+  masterSet: my-master

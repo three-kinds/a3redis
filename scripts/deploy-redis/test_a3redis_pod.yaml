@@ -11,6 +11,8 @@ spec:
     volumeMounts:
     - mountPath: /a3redis
       name: a3redis-dir
+  - image: redis:6
+    name: default-redis
   restartPolicy: OnFailure
   volumes:
   - name: a3redis-dir

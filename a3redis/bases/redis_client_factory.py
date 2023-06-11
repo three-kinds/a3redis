@@ -67,7 +67,7 @@ class RedisClientFactory(object):
     # 初始化3：没有指定任何参数，就使用默认配置redis://127.0.0.1:6379/0
     @classmethod
     def _init_default_rdb(cls):
-        cls.init_one_redis_client(DEFAULT_NAME, Conf(mode=RedisMode.Standalone))
+        cls.init_one_redis_client(DEFAULT_NAME, Conf(mode=RedisMode.Standalone, init={'decode_responses': True}))
 
     @classmethod
     def get_rdb(cls, name: str = DEFAULT_NAME, readonly: bool = False) -> Union[Redis, RedisCluster, None]:
