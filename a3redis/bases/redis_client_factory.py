@@ -70,10 +70,13 @@ class RedisClientFactory(object):
         cls.init_one_redis_client(DEFAULT_NAME, Conf(mode=RedisMode.Standalone, init={'decode_responses': True}))
 
     @classmethod
-    def get_rdb(cls, name: str = DEFAULT_NAME, readonly: bool = False) -> Union[Redis, RedisCluster, None]:
+    def get_rdb(cls, name: str = None, readonly: bool = False) -> Union[Redis, RedisCluster, None]:
+        if name is None:
+            name = DEFAULT_NAME
+
         conf = cls._name2conf.get(name)
         if conf is None:
-            if name in [DEFAULT_NAME, None]:
+            if name == DEFAULT_NAME:
                 cls._init_default_rdb()
                 return cls._name2redis[DEFAULT_NAME]
             else:
