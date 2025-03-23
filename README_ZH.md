@@ -1,25 +1,25 @@
 # a3redis
 
-English | [简体中文](README_ZH.md)
+[English](README.md) | 简体中文
 
-`a3redis` is a simple wrapper around `redis-py` to make it easier to use.
+`a3redis` 对 `redis-py` 做了简单的封装，目的是用起来更简单。
 
-## 1. Introduction
+## 1. 简介
 
-* When logically compatible, the Redis service type (standalone, sentinel, or cluster) can be switched by only modifying the configuration without changing the code.
-* You can configure multiple Redis services of different types at the same time; if no Redis service configuration is specified, `redis://localhost:6379/0` will be used by default.
-* Provides class forms of commonly used data structures for ease of use.
+* 在逻辑兼容的情况下，可以通过不修改代码只修改配置的方式，切换 redis 的服务类型：单体、哨兵 或 集群
+* 可以同时配置多个、不同类型的 redis 服务；如果没有指定 redis 服务配置，默认使用 `redis://localhost:6379/0`
+* 提供常用数据结构的class形式，便于使用
 
-## 2. Usage
+## 2. 使用
 
-## Install
+## 安装
 
 ```shell
 pip install a3redis
 
 ```
 
-## Examples
+## 样例
 
 ```python
 CONF = {
