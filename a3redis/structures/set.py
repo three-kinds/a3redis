@@ -5,7 +5,6 @@ from .base_structure import BaseStructure
 
 
 class Set(BaseStructure):
-
     def add_member(self, member: Union[str, list]) -> int:
         # 返回成功add的个数
         if isinstance(member, list):

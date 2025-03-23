@@ -4,7 +4,6 @@ from .base_structure import BaseStructure
 
 
 class Hash(BaseStructure):
-
     def __setitem__(self, key: str, value: str):
         self.set_member(key, value)
 

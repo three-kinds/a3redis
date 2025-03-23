@@ -6,7 +6,6 @@ from a3redis.bases.base_on_connection import BaseOnConnection
 
 
 class Script(BaseOnConnection):
-
     def __init__(self, lua_content: str, rdb: redis.Redis = None):
         super().__init__(rdb=rdb)
 

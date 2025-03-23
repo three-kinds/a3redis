@@ -7,12 +7,7 @@ from a3redis.bases.base_on_connection import BaseOnConnection
 class BaseStructure(BaseOnConnection):
     main_key = None
 
-    def __init__(
-            self,
-            rdb: redis.Redis = None,
-            main_key: str = None,
-            **kwargs
-    ):
+    def __init__(self, rdb: redis.Redis = None, main_key: str = None, **kwargs):
         super().__init__(rdb=rdb)
 
         self.main_key = main_key or self.main_key

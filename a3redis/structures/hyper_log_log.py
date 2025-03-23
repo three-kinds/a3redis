@@ -4,7 +4,6 @@ from a3redis.structures.base_structure import BaseStructure
 
 
 class HyperLogLog(BaseStructure):
-
     def add(self, member: Union[str, list]) -> int:
         # 如果至少有1个元素被添加返回1， 否则返回0
         if isinstance(member, list):

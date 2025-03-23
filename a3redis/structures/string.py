@@ -4,7 +4,6 @@ from .base_structure import BaseStructure
 
 
 class String(BaseStructure):
-
     def get(self) -> str:
         return self.rdb.get(self.main_key)
 

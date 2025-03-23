@@ -6,18 +6,18 @@ from .base_structure import BaseStructure
 
 
 class SortedSet(BaseStructure):
-
     # 没有set_member，add就能起到set的效果
     def add(
-            self, key: str, score: Union[Number, str],
-            only_add: bool = False, only_update: bool = False, change_return: bool = False
+        self,
+        key: str,
+        score: Union[Number, str],
+        only_add: bool = False,
+        only_update: bool = False,
+        change_return: bool = False,
     ) -> int:
         return self.add_list({key: score}, only_add, only_update, change_return)
 
-    def add_list(
-            self, mapping: dict,
-            only_add: bool = False, only_update: bool = False, change_return: bool = False
-    ):
+    def add_list(self, mapping: dict, only_add: bool = False, only_update: bool = False, change_return: bool = False):
         """
         Args:
             mapping: key, store的列表
@@ -79,19 +79,19 @@ class SortedSet(BaseStructure):
         return self.rdb.zlexcount(self.main_key, min_member, max_member)
 
     def get_member_list(
-            self, start_index: int, stop_index: int,
-            with_scores: bool = False, score_cast_func: Callable = float,
-            desc: bool = False
+        self,
+        start_index: int,
+        stop_index: int,
+        with_scores: bool = False,
+        score_cast_func: Callable = float,
+        desc: bool = False,
     ) -> list:
         return self.rdb.zrange(
-            self.main_key, start_index, stop_index,
-            desc=desc, withscores=with_scores, score_cast_func=score_cast_func
+            self.main_key, start_index, stop_index, desc=desc, withscores=with_scores, score_cast_func=score_cast_func
         )
 
     def get_member_list_between_members(
-            self, min_member: str, max_member: str,
-            offset: int = None, count: int = None,
-            desc: bool = False
+        self, min_member: str, max_member: str, offset: int = None, count: int = None, desc: bool = False
     ) -> list:
         if not desc:
             func = self.rdb.zrangebylex
@@ -101,10 +101,14 @@ class SortedSet(BaseStructure):
         return func(self.main_key, min_member, max_member, offset, count)
 
     def get_member_list_between_scores(
-            self, min_score, max_score,
-            offset: int = None, count: int = None,
-            with_scores: bool = False, score_cast_func: Callable = float,
-            desc: bool = False
+        self,
+        min_score,
+        max_score,
+        offset: int = None,
+        count: int = None,
+        with_scores: bool = False,
+        score_cast_func: Callable = float,
+        desc: bool = False,
     ) -> list:
         if not desc:
             func = self.rdb.zrangebyscore

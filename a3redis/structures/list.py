@@ -5,7 +5,6 @@ from .base_structure import BaseStructure
 
 
 class List(BaseStructure):
-
     def get_length(self) -> int:
         return self.rdb.llen(self.main_key)
 

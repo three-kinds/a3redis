@@ -7,14 +7,13 @@ from tests.base_redis_test_case import ALL_CONF
 
 
 class T(TestCase):
-
     def test_daily_use(self):
         # load all redis server
         RedisClientFactory.init_redis_clients(ALL_CONF)
 
         class MessageList(List):
             rdb_conf_name = RedisMode.Cluster
-            main_key = 'message_list'
+            main_key = "message_list"
 
         message_list = MessageList()
         message_list.delete()
@@ -26,8 +25,8 @@ class T(TestCase):
 
     def test_different_server_mode(self):
         class User(Hash):
-            main_key = 'user:{id}'
-            _hkey_username = 'username'
+            main_key = "user:{id}"
+            _hkey_username = "username"
 
             def get_username(self) -> str:
                 return self.get_member_by_key(self._hkey_username)
