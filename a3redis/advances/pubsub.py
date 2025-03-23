@@ -5,7 +5,7 @@ from a3redis.bases.base_on_connection import BaseOnConnection
 
 
 class Publisher(BaseOnConnection):
-    def __init__(self, channel_name: str, rdb: redis.Redis = None):
+    def __init__(self, channel_name: str, rdb: redis.Redis | None = None):
         super().__init__(rdb=rdb)
         self._channel_name = channel_name
 
@@ -14,7 +14,7 @@ class Publisher(BaseOnConnection):
 
 
 class Subscriber(BaseOnConnection):
-    def __init__(self, channel_name: str, rdb: redis.Redis = None):
+    def __init__(self, channel_name: str, rdb: redis.Redis | None = None):
         super().__init__(rdb=rdb)
 
         self._should_break = False

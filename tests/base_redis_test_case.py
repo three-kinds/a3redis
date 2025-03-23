@@ -44,7 +44,7 @@ ALL_CONF = {
 
 
 class BaseRedisTestCase(unittest.TestCase):
-    rdb: redis.Redis = None
+    rdb: redis.Redis | redis.RedisCluster
     redis_name = DEFAULT_NAME
 
     @classmethod
@@ -52,7 +52,8 @@ class BaseRedisTestCase(unittest.TestCase):
         RedisClientFactory.init_redis_clients(ALL_CONF)
 
     def setUp(self) -> None:
-        self.rdb = RedisClientFactory.get_rdb(self.redis_name)
+        class_rdb = getattr(self, "rdb", None)
+        self.rdb = class_rdb or RedisClientFactory.get_rdb(self.redis_name)
 
     def tearDown(self) -> None:
         if self.redis_name != RedisMode.Cluster:

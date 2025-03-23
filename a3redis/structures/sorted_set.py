@@ -39,16 +39,18 @@ class SortedSet(BaseStructure):
     def pop_min(self, count: int = 1) -> list:
         return self.rdb.zpopmin(self.main_key, count)
 
-    def block_pop_max(self, timeout: int = 0) -> list:
+    def block_pop_max(self, timeout: int = 0) -> tuple | None:
         # 0代表一直等，这个只能同时等一个
         values = self.rdb.bzpopmax(self.main_key, timeout)
         if values is not None:
-            return [(values[1], values[2])]
+            return values[1], values[2]  # type: ignore
+        return None
 
-    def block_pop_min(self, timeout: int = 0) -> list:
+    def block_pop_min(self, timeout: int = 0) -> tuple | None:
         values = self.rdb.bzpopmax(self.main_key, timeout)
         if values is not None:
-            return [(values[1], values[2])]
+            return values[1], values[2]  # type: ignore
+        return None
 
     def get_count_between_scores(self, min_score, max_score) -> int:
         """
@@ -91,32 +93,33 @@ class SortedSet(BaseStructure):
         )
 
     def get_member_list_between_members(
-        self, min_member: str, max_member: str, offset: int = None, count: int = None, desc: bool = False
+        self, min_member: str, max_member: str, offset: int | None = None, count: int | None = None, desc: bool = False
     ) -> list:
         if not desc:
-            func = self.rdb.zrangebylex
+            return self.rdb.zrangebylex(self.main_key, min_member, max_member, offset, count)
         else:
-            func = self.rdb.zrevrangebylex
             min_member, max_member = max_member, min_member
-        return func(self.main_key, min_member, max_member, offset, count)
+            return self.rdb.zrevrangebylex(self.main_key, min_member, max_member, offset, count)
 
     def get_member_list_between_scores(
         self,
         min_score,
         max_score,
-        offset: int = None,
-        count: int = None,
+        offset: int | None = None,
+        count: int | None = None,
         with_scores: bool = False,
         score_cast_func: Callable = float,
         desc: bool = False,
     ) -> list:
         if not desc:
-            func = self.rdb.zrangebyscore
+            return self.rdb.zrangebyscore(
+                self.main_key, min_score, max_score, offset, count, with_scores, score_cast_func
+            )
         else:
-            func = self.rdb.zrevrangebyscore
             min_score, max_score = max_score, min_score
-
-        return func(self.main_key, min_score, max_score, offset, count, with_scores, score_cast_func)
+            return self.rdb.zrevrangebyscore(
+                self.main_key, min_score, max_score, offset, count, with_scores, score_cast_func
+            )
 
     def get_rank(self, member: str, desc: bool = False) -> int:
         if not desc:

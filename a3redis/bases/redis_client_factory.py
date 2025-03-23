@@ -41,24 +41,27 @@ class RedisClientFactory(object):
     @classmethod
     def init_redis_clients(cls, conf: dict):
         for name, info in conf.items():
-            conf = Conf(**info)
-            cls._name2conf[name] = conf
-            cls.init_one_redis_client(name=name, conf=conf)
+            _conf = Conf(**info)
+            cls._name2conf[name] = _conf
+            cls.init_one_redis_client(name=name, conf=_conf)
 
     # 初始化2：单个server配置
     @classmethod
     def init_one_redis_client(cls, name: str, conf: Conf):
         cls._name2conf[name] = conf
+        assert conf.init is not None
         if conf.mode == RedisMode.Standalone:
             connection_pool = ConnectionPool(**conf.init)
             redis = Redis(connection_pool=connection_pool)
             cls._name2redis[name] = redis
         elif conf.mode == RedisMode.Sentinel:
+            assert conf.runtime is not None
             sentinel = Sentinel(**conf.init)
             cls._name2sentinel[name] = sentinel
             cls._name2master_redis[name] = sentinel.master_for(**conf.runtime)
             cls._name2slave_redis[name] = sentinel.slave_for(**conf.runtime)
         elif conf.mode == RedisMode.Cluster:
+            assert "connection_pool" not in conf.init
             cluster = RedisCluster(**conf.init)
             cls._name2cluster[name] = cluster
         else:
@@ -70,7 +73,7 @@ class RedisClientFactory(object):
         cls.init_one_redis_client(DEFAULT_NAME, Conf(mode=RedisMode.Standalone, init={"decode_responses": True}))
 
     @classmethod
-    def get_rdb(cls, name: str = None, readonly: bool = False) -> Union[Redis, RedisCluster, None]:
+    def get_rdb(cls, name: str | None = None, readonly: bool = False) -> Union[Redis, RedisCluster]:
         if name is None:
             name = DEFAULT_NAME
 
@@ -82,8 +85,9 @@ class RedisClientFactory(object):
             else:
                 raise AssertionError(f"Invalid redis client [{name}]")
 
+        assert conf.mode in [RedisMode.Standalone, RedisMode.Sentinel, RedisMode.Cluster]
         if conf.mode == RedisMode.Standalone:
-            return cls._name2redis.get(name)
+            return cls._name2redis[name]
         elif conf.mode == RedisMode.Sentinel:
             # find cache
             if readonly:
@@ -96,6 +100,7 @@ class RedisClientFactory(object):
 
             # new
             sentinel: Sentinel = cls._name2sentinel[name]
+            assert conf.runtime is not None
 
             if readonly:
                 slave_redis = sentinel.slave_for(**conf.runtime)
@@ -105,6 +110,5 @@ class RedisClientFactory(object):
                 master_redis = sentinel.master_for(**conf.runtime)
                 cls._name2master_redis[name] = master_redis
                 return master_redis
-
-        elif conf.mode == RedisMode.Cluster:
+        else:
             return cls._name2cluster[name]

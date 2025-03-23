@@ -42,15 +42,27 @@ class List(BaseStructure):
     def left_pop(self) -> str:
         return self.rdb.lpop(self.main_key)
 
-    def block_left_pop(self, timeout_seconds: int = 0) -> str:
-        result = self.rdb.blpop(self.main_key, timeout_seconds)
+    def block_left_pop(self, timeout_seconds: int = 0) -> str | None:
+        result = self.rdb.blpop(
+            [
+                self.main_key,
+            ],
+            timeout_seconds,
+        )
         if isinstance(result, tuple) and len(result) == 2:
             return result[1]
+        return None
 
-    def block_right_pop(self, timeout_seconds: int = 0) -> str:
-        result = self.rdb.brpop(self.main_key, timeout_seconds)
+    def block_right_pop(self, timeout_seconds: int = 0) -> str | None:
+        result = self.rdb.brpop(
+            [
+                self.main_key,
+            ],
+            timeout_seconds,
+        )
         if isinstance(result, tuple) and len(result) == 2:
             return result[1]
+        return None
 
     def remove_member(self, member: str, count: int = 0) -> int:
         return self.rdb.lrem(self.main_key, count, member)

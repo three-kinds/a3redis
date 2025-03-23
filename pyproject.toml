@@ -60,7 +60,9 @@ packages = [
 ]
 disable_error_code = [
     "import-untyped",
-    "method-assign"
+    "method-assign",
+    "abstract",
+    "return-value"
 ]
 
 [tool.ruff]

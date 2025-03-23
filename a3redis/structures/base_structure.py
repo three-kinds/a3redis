@@ -5,12 +5,13 @@ from a3redis.bases.base_on_connection import BaseOnConnection
 
 
 class BaseStructure(BaseOnConnection):
-    main_key = None
+    main_key: str = ""
 
-    def __init__(self, rdb: redis.Redis = None, main_key: str = None, **kwargs):
+    def __init__(self, rdb: redis.Redis | redis.RedisCluster | None = None, main_key: str | None = None, **kwargs):
         super().__init__(rdb=rdb)
 
         self.main_key = main_key or self.main_key
+        assert self.main_key not in (None, ""), "main_key must be set"
         if len(kwargs.keys()) > 0:
             self.main_key = self.main_key.format(**kwargs)
 

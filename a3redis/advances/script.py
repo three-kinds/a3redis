@@ -6,8 +6,9 @@ from a3redis.bases.base_on_connection import BaseOnConnection
 
 
 class Script(BaseOnConnection):
-    def __init__(self, lua_content: str, rdb: redis.Redis = None):
+    def __init__(self, lua_content: str, rdb: redis.Redis | None = None):
         super().__init__(rdb=rdb)
+        assert isinstance(self.rdb, redis.Redis)
 
         self._lua_content = lua_content
         self._script = self.rdb.register_script(self._lua_content)
