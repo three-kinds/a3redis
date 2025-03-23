@@ -39,17 +39,17 @@ class SortedSet(BaseStructure):
     def pop_min(self, count: int = 1) -> list:
         return self.rdb.zpopmin(self.main_key, count)
 
-    def block_pop_max(self, timeout: int = 0) -> tuple | None:
+    def block_pop_max(self, timeout: int = 0) -> list | None:
         # 0代表一直等，这个只能同时等一个
         values = self.rdb.bzpopmax(self.main_key, timeout)
         if values is not None:
-            return values[1], values[2]  # type: ignore
+            return [(values[1], values[2])]  # type: ignore
         return None
 
-    def block_pop_min(self, timeout: int = 0) -> tuple | None:
+    def block_pop_min(self, timeout: int = 0) -> list | None:
         values = self.rdb.bzpopmax(self.main_key, timeout)
         if values is not None:
-            return values[1], values[2]  # type: ignore
+            return [(values[1], values[2])]  # type: ignore
         return None
 
     def get_count_between_scores(self, min_score, max_score) -> int:
