@@ -8,7 +8,7 @@ coverage:
 	coverage report
 
 test:
-	tox -p
+	tox
 
 build:
 	python -m build
