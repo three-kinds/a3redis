@@ -28,7 +28,7 @@ class StringTestCase(BaseRedisTestCase):
 
         redis_string.expire(1)
         self.assertTrue(redis_string.exists())
-        time.sleep(1)
+        time.sleep(1.5)
         self.assertFalse(redis_string.exists())
 
     def test__set_if_not_exists__success(self):

@@ -78,10 +78,10 @@ class SortedSetTestCase(BaseRedisTestCase):
         self.assertEqual(ss.pop_max(2), [("3", 3.0), ("2", 2.0)])
         self.assertEqual(ss.pop_min(1), [("0", 0.0)])
 
-        self.assertEqual(ss.block_pop_max(), ("1", 1.0))
+        self.assertEqual(ss.block_pop_max(), [("1", 1.0)])
         self.assertEqual(ss.block_pop_min(1), None)
         ss.add("1", 1)
-        self.assertEqual(ss.block_pop_min(1), ("1", 1.0))
+        self.assertEqual(ss.block_pop_min(1), [("1", 1.0)])
 
     def test__remove_member__success(self):
         ss = SortedSet(main_key="test_sorted_set", rdb=self.rdb)
