@@ -1,6 +1,6 @@
 # a3redis
 
-It is just a thin wrapper of redis.
+a3redis is a simple wrapper around redis-py to make it easier to use.
 
 [History.](HISTORY.md)
 

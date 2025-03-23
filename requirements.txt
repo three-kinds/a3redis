@@ -1,5 +1,1 @@
-redis >= 4.2.2
-
-# 测试与维护
-coverage >= 6.3.2
-twine
+redis >= 5.2.1
